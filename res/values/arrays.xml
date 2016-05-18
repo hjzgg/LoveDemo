@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="type">
+        <item>Default</item>
+        <item>Accordion</item>
+        <item>Background2Foreground</item>
+        <item>CubeIn</item>
+        <item>DepthPage</item>
+        <item>Fade</item>
+        <item>FlipHorizontal</item>
+        <item>FlipPage</item>
+        <item>Foreground2Background</item>
+        <item>RotateDown</item>
+        <item>RotateUp</item>
+        <item>Stack</item>
+        <item>Tablet</item>
+        <item>ZoomIn</item>
+        <item>ZoomOutSlide</item>
+        <item>ZoomOut</item>
+    </string-array>
+</resources>
