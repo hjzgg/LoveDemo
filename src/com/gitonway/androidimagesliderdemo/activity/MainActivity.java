@@ -5,18 +5,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.http.util.EncodingUtils;
 
-import com.gitonway.androidimagesliderdemo.R;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.SliderLayout;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.SliderLayout.Transformer;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Animations.DescriptionAnimation;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Indicators.PagerIndicator;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.SliderTypes.BaseSliderView;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.SliderTypes.TextSliderView;
+import com.hjzgg.R;
 import com.textsurface.TextSurface;
 import com.textsurface.animations.AnimationsSet;
 import com.textsurface.contants.TYPE;
@@ -125,15 +126,18 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
  		new Timer().schedule(task, 2000, 2000);
     }
     
-    
+    //res/raw中的音乐文件资源映射
+    private Map<String, Integer> musicPath;
     //播放对象
   	private MediaPlayer myMediaPlayer;
   	//播放列表
   	private List<String> myMusicList = new ArrayList<String>();
   	//当前播放歌曲的索引
   	private int currentListItem=0;
-  	//音乐的路径
-  	private static final String MUSIC_PATH = new String(Environment.getExternalStorageDirectory().getAbsolutePath() + "/hjz/");
+  	//音乐的路径, 如果存在sd卡，则使用sd卡，否则使用内存中的data目录
+  	private static String MUSIC_PATH = !hasSDCardMounted() ?  new String(Environment.getExternalStorageDirectory().getAbsolutePath() + "/hjz/")
+  				: null;
+  	
   	
     private void initMusic(){
     	myMediaPlayer=new MediaPlayer();
@@ -143,22 +147,41 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
         
         //自动播放第一首歌
         if(myMusicList.size() > 0){
-        	playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
+        	playMusic(MUSIC_PATH, myMusicList.get(currentListItem));
         }
     }
     
-  //绑定音乐
-    void musicList(){
+    public static boolean hasSDCardMounted() {
+        String state = Environment.getExternalStorageState();
+        if (state != null && state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    //绑定音乐
+    private void musicList(){
     	try {
-    		Log.e("mypath", MUSIC_PATH);
-	    	File home=new File(MUSIC_PATH);
-	    	if(home.listFiles(new MusicFilter()).length>0){
-	    		for(File file:home.listFiles(new MusicFilter())){
-	    			myMusicList.add(file.getName());
-	    		}
-	    		ArrayAdapter<String> musicList = new ArrayAdapter<String>(MainActivity.this, R.layout.musicitme, myMusicList);
-	    		setListAdapter(musicList);
-	    	}
+    		if(MUSIC_PATH == null) {//绑定 res/raw下的音乐文件
+    			musicPath = new HashMap<String, Integer>();
+    			musicPath.put("杨宗纬 - 一次就好.mp3", R.raw.yi_ci_jiu_hao);
+    			musicPath.put("霍建华,赵丽颖 - 不可说.mp3", R.raw.bu_ke_shuo);
+    			musicPath.put("川井憲次 - 孤独な巡礼.mp3", R.raw.gu_du_xun_li);
+    			myMusicList.addAll(musicPath.keySet());
+    		} else {
+    			Log.v("MUSIC_PATH", MUSIC_PATH);
+    			File home = new File(MUSIC_PATH);
+    			if(home.listFiles(new MusicFilter()).length>0){
+    				for(File file:home.listFiles(new MusicFilter())){
+    					myMusicList.add(file.getName());
+    				}
+    			}
+    		}
+    		if(myMusicList.size() > 0) {
+    			ArrayAdapter<String> musicList = new ArrayAdapter<String>(MainActivity.this, R.layout.musicitme, myMusicList);
+    			setListAdapter(musicList);
+    		}
     	} catch (Exception e) {
     		Log.e("获取音乐文件出错:", e.toString());
     	}
@@ -193,7 +216,7 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
+			playMusic(MUSIC_PATH, myMusicList.get(currentListItem));
 		}
 	});
 	   //下一首
@@ -219,12 +242,9 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
 		}
 	});
 	   //上一首
-	   viewHolder.last.setOnClickListener(new OnClickListener() {
-		
+    viewHolder.last.setOnClickListener(new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
 			lastMusic();
 		}
 	});
@@ -232,47 +252,48 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
    }
    
    //播放音乐 
-   void playMusic(String path){
-	   try { 
-		myMediaPlayer.reset();
-		myMediaPlayer.setDataSource(path);
-		myMediaPlayer.prepare();
-		myMediaPlayer.start();
-		myMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-			
-			@Override
-			public void onCompletion(MediaPlayer mp) {
-				// TODO Auto-generated method stub
-				nextMusic();
-			}
-		});
-	} catch (Exception e) {
-		// TODO: handle exception
-		e.printStackTrace();
-	}
+   void playMusic(String basePath, String path){
+	  try { 
+		   if(basePath != null) {
+			   myMediaPlayer.reset();
+			   myMediaPlayer.setDataSource(basePath+path);
+			   myMediaPlayer.prepare();
+		   } else {
+			   myMediaPlayer.pause();
+			   myMediaPlayer.release();
+			   myMediaPlayer = MediaPlayer.create(MainActivity.this, musicPath.get(path));
+		   }
+		   myMediaPlayer.start();
+		   myMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+				@Override
+				public void onCompletion(MediaPlayer mp) {
+					nextMusic();
+				}
+			});
+	   } catch (Exception e) {
+		   Log.e("播放sd卡音乐失败", e.toString());
+		   e.printStackTrace();
+	   }
    }
    
    //下一首
    void nextMusic(){
-	   if(++currentListItem>=myMusicList.size()){
-		   currentListItem=0;
-	   }
-	   else{
-		   playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
+	   if(myMusicList.size() > 0) {
+		   if(++currentListItem>=myMusicList.size()){
+			   currentListItem=0;
+		   }
+		   playMusic(MUSIC_PATH, myMusicList.get(currentListItem));
 	   }
    }
    
    //上一首
    void lastMusic(){
-	   if(currentListItem!=0)
-		   {
-	   if(--currentListItem>=0){
-		   currentListItem=myMusicList.size();
-	   } else{
-		   playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
-	   }
-		  }  else{
-		   playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
+	   if(myMusicList.size() > 0) {
+		   if(currentListItem!=0) {
+			   playMusic(MUSIC_PATH, myMusicList.get(--currentListItem));
+			}  else{
+			   playMusic(MUSIC_PATH, myMusicList.get(currentListItem=myMusicList.size()-1));
+		    }
 	   }
    }
    
@@ -292,7 +313,7 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
     @Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		currentListItem=position;
-		playMusic(MUSIC_PATH+myMusicList.get(currentListItem));
+		playMusic(MUSIC_PATH, myMusicList.get(currentListItem));
 	}
     
     //初始化文字展示

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gitonway.androidimagesliderdemo.R;
+import com.hjzgg.R;
 
 /**
  * This is a slider with a description TextView.

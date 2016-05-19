@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.View;
 
-import com.gitonway.androidimagesliderdemo.R;
+import com.hjzgg.R;
 import com.nineoldandroids.view.ViewHelper;
 
 /**

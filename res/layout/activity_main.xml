@@ -8,20 +8,19 @@
     tools:context="com.gitonway.androidimagesliderdemo.activity.MainActivity">
     
     <LinearLayout android:id="@+id/LinearLayoutPicture"
-        android:layout_weight="1"
-        android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_weight="3"
+        android:layout_height="fill_parent"
+        android:layout_width="match_parent">
 	    <!-- 图片切换  -->
 	    <com.gitonway.androidimagesliderdemo.widget.imageslider.SliderLayout
 	        android:id="@+id/slider"
 	        android:layout_width="match_parent"
+	        android:layout_height="fill_parent"
 	        custom:pager_animation="Accordion"
 	        custom:auto_cycle="true"
 	        custom:indicator_visibility="visible"
-	        custom:pager_animation_span="1100"
-	        android:layout_height="200dp"/>
+	        custom:pager_animation_span="1100"/>
 	
 	  <!--  <com.gitonway.androidimagesliderdemo.widget.imageslider.Indicators.PagerIndicator
 	        android:id="@+id/custom_indicator"
@@ -55,46 +54,41 @@
     
     <!-- 文字展现  -->
     <LinearLayout android:id="@+id/LinearLayoutWord"
-        android:layout_weight="1"
-        android:layout_alignBottom="@+id/LinearLayoutPicture"
+		android:layout_weight="3"
+		android:layout_height="fill_parent"
         android:orientation="vertical"
         android:background="@android:color/background_dark"
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_width="match_parent">
 
 	    <com.textsurface.TextSurface
 	        android:id="@+id/text_surface"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"/>
+	        android:layout_height="fill_parent"
+	        android:layout_width="match_parent"/>
 	
 	</LinearLayout>
     
     <!-- 音乐播放器  -->
+
     <LinearLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-	    android:id="@+id/LinearLayoutMusic"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content">
+        android:id="@+id/LinearLayoutMusic"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 	    
 		<ListView
 		    android:id="@id/android:list"
-		    android:layout_width="fill_parent"
-		    android:layout_height="100dp"
-		    android:layout_above="@+id/bottomBtn"
-		    android:layout_alignParentLeft="true"
-		    android:drawSelectorOnTop="false"
-		    android:layout_marginBottom="10dp"
-		    android:scrollbars="vertical" >
-		</ListView>
+		    android:layout_width="match_parent"
+		    android:layout_weight="1"
+		    android:layout_height="fill_parent"
+		    android:scrollbars="vertical" />
 		
 		<LinearLayout
 		    android:id="@+id/bottomBtn"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentBottom="true"
-		    android:gravity="center|center_horizontal|center_vertical" >
+		    android:layout_width="match_parent"
+		    android:layout_height="60dp"
+		    android:gravity="center|center_horizontal|center_vertical"
+		    android:orientation="horizontal" >
 	
 			<Button   android:id="@+id/last"  
 			  android:background="@drawable/last"
@@ -102,18 +96,22 @@
 			
 			<Button  android:id="@+id/stop"
 			  android:background="@drawable/stop"
+			  android:layout_marginLeft="10dp"
 			  android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 			 
 			<Button  android:id="@+id/start" 
 			  android:background="@drawable/start"
+			  android:layout_marginLeft="10dp"
 			  android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 			
 			<Button  android:id="@+id/pause" android:layout_width="wrap_content"
 			  android:background="@drawable/pause"
+			  android:layout_marginLeft="10dp"
 			  android:layout_height="wrap_content"></Button>
 			 
 			<Button  android:id="@+id/next"
 			  android:background="@drawable/next"
+			  android:layout_marginLeft="10dp"
 			  android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 		</LinearLayout>
 	</LinearLayout>

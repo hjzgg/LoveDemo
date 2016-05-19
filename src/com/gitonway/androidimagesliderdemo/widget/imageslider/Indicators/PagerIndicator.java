@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.gitonway.androidimagesliderdemo.R;
+import com.hjzgg.R;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Tricks.InfinitePagerAdapter;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Tricks.ViewPagerEx;
 

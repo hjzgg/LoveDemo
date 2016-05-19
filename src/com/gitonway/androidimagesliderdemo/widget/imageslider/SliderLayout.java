@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.gitonway.androidimagesliderdemo.R;
+import com.hjzgg.R;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Animations.BaseAnimationInterface;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.Indicators.PagerIndicator;
 import com.gitonway.androidimagesliderdemo.widget.imageslider.SliderTypes.BaseSliderView;
