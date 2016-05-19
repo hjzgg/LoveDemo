@@ -162,7 +162,10 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
     //绑定音乐
     private void musicList(){
     	try {
-    		if(MUSIC_PATH == null) {//绑定 res/raw下的音乐文件
+    		File home = new File(MUSIC_PATH);
+    		//如果有sd卡，但是sd卡中没有指定的音乐文件夹，则采用项目中的音乐文件
+    		if(MUSIC_PATH == null || home.listFiles() == null) {//绑定 res/raw下的音乐文件
+    			MUSIC_PATH = null;
     			musicPath = new HashMap<String, Integer>();
     			musicPath.put("杨宗纬 - 一次就好.mp3", R.raw.yi_ci_jiu_hao);
     			musicPath.put("霍建华,赵丽颖 - 不可说.mp3", R.raw.bu_ke_shuo);
@@ -170,7 +173,6 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
     			myMusicList.addAll(musicPath.keySet());
     		} else {
     			Log.v("MUSIC_PATH", MUSIC_PATH);
-    			File home = new File(MUSIC_PATH);
     			if(home.listFiles(new MusicFilter()).length>0){
     				for(File file:home.listFiles(new MusicFilter())){
     					myMusicList.add(file.getName());
@@ -214,7 +216,7 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			if(myMusicList.size() == 0) return;
 			playMusic(MUSIC_PATH, myMusicList.get(currentListItem));
 		}
 	});
@@ -223,7 +225,6 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			nextMusic();
 		}
 	});
@@ -232,7 +233,7 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			if(myMusicList.size() == 0) return;
 			if(myMediaPlayer.isPlaying()){
 				myMediaPlayer.pause();
 			}else{
