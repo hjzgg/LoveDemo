@@ -39,7 +39,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
 public class MainActivity extends ListActivity implements BaseSliderView.OnSliderClickListener{
 
     @Override
@@ -135,7 +134,7 @@ public class MainActivity extends ListActivity implements BaseSliderView.OnSlide
   	//当前播放歌曲的索引
   	private int currentListItem=0;
   	//音乐的路径, 如果存在sd卡，则使用sd卡，否则使用内存中的data目录
-  	private static String MUSIC_PATH = !hasSDCardMounted() ?  new String(Environment.getExternalStorageDirectory().getAbsolutePath() + "/hjz/")
+  	private static String MUSIC_PATH = hasSDCardMounted() ?  new String(Environment.getExternalStorageDirectory().getAbsolutePath() + "/hjz/")
   				: null;
   	
   	
